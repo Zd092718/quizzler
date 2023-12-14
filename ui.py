@@ -12,7 +12,7 @@ class UserInterface:
         self.window.title("Quizzler")
         self.window.config(width=600, height=500, padx=20, pady=20, bg=THEME_COLOR)
 
-        self.score_label = Label(text="Score: 0", fg="white", bg=THEME_COLOR)
+        self.score_label = Label(text=f"Score: {self.quiz.score}", fg="white", bg=THEME_COLOR)
         self.score_label.grid(row=0, column=1)
 
         self.canvas = Canvas(width=300, height=250, bg="white")
@@ -25,11 +25,11 @@ class UserInterface:
         self.canvas.grid(row=1, column=0, columnspan=2, pady=50)
 
         true_img = PhotoImage(file="./images/true.png")
-        self.true_button = Button(image=true_img, highlightthickness=0)
+        self.true_button = Button(image=true_img, highlightthickness=0, command=self.correct_answer)
         self.true_button.grid(row=2, column=0)
 
         false_img = PhotoImage(file="./images/false.png")
-        self.false_button = Button(image=false_img, highlightthickness=0)
+        self.false_button = Button(image=false_img, highlightthickness=0, command=self.incorrect_answer)
         self.false_button.grid(row=2, column=1)
 
         self.get_next_question()
@@ -39,3 +39,11 @@ class UserInterface:
     def get_next_question(self):
         q_text = self.quiz.next_question()
         self.canvas.itemconfig(self.question_text, text=q_text)
+
+    def correct_answer(self):
+        self.quiz.check_answer("True")
+        self.get_next_question()
+
+    def incorrect_answer(self):
+        self.quiz.check_answer("False")
+        self.get_next_question()
